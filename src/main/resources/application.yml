@@ -1,13 +1,13 @@
 server:
-  port: 8081
+  port: 80
 
 spring:
   profiles:
     active: development
   application:
-    title: gateway
+    title: micro_gateway
     version: 1.0
-    name: gateway
+    name: micro_gateway
 
   cloud:
     gateway:
@@ -33,19 +33,19 @@ spring:
     gateway:
       routes:
         - id: auth
-          uri: http://auth:8082
+          uri: http://dreamrealm.com:8082
           predicates:
             - Path=/api/auth/**
           filters:
             - RewritePath=/api/auth/(?<segment>.*), /$\{segment}
         - id: messages
-          uri: http://messages:8080
+          uri: http://dreamrealm.com:8081
           predicates:
             - Path=/api/messages/**
           filters:
             - RewritePath=/api/messages/(?<segment>.*), /$\{segment}
         - id: trading
-          uri: http://messages:8083
+          uri: http://dreamrealm.com:8083
           predicates:
             - Path=/api/trading/**
           filters:
@@ -63,20 +63,20 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: auth
-          uri: http://auth:8082
+        - id: dreamrealm-auth
+          uri: http://localhost:8082
           predicates:
-            - Path=/api/auth/**
+            - Path=**/**
           filters:
             - RewritePath=/api/auth/(?<segment>.*), /$\{segment}
-        - id: messages
-          uri: http://messages:8080
+        - id: dreamrealm-messages
+          uri: http://localhost:8081
           predicates:
             - Path=/api/messages/**
           filters:
             - RewritePath=/api/messages/(?<segment>.*), /$\{segment}
-        - id: trading
-          uri: http://messages:8083
+        - id: dreamrealm-trading
+          uri: http://localhost:8083
           predicates:
             - Path=/api/trading/**
           filters:
@@ -95,20 +95,20 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: auth
-          uri: http://auth:8082
+        - id: dreamrealm-auth
+          uri: http://dreamrealm-auth:8082
           predicates:
             - Path=/api/auth/**
           filters:
             - RewritePath=/api/auth/(?<segment>.*), /$\{segment}
-        - id: messages
-          uri: http://messages:8080
+        - id: dreamrealm-messages
+          uri: http://dreamrealm-messages:8081
           predicates:
             - Path=/api/messages/**
           filters:
             - RewritePath=/api/messages/(?<segment>.*), /$\{segment}
-        - id: trading
-          uri: http://messages:8083
+        - id: dreamrealm-trading
+          uri: http://dreamrealm-trading:8083
           predicates:
             - Path=/api/trading/**
           filters:
