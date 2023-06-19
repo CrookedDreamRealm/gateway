@@ -1,21 +1,17 @@
 server:
-  port: 80
+  port: 8080
 
 spring:
-  profiles:
-    active: development
   application:
-    title: micro_gateway
-    version: 1.0
-    name: micro_gateway
-
+    title: gateway
+    name: gateway
   cloud:
     gateway:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "*"
-            allowedMethods: "*"
+            allowed-origins: "*"
+            allowed-methods: "*"
   main:
     allow-bean-definition-overriding: true
     web-application-type: reactive
@@ -24,97 +20,5 @@ logging:
     org:
       springframework:
         security: DEBUG
----
-spring:
-  config:
-    activate:
-      on-profile: production
-  cloud:
-    gateway:
-      routes:
-        - id: auth
-          uri: http://dreamrealm.com:8082
-          predicates:
-            - Path=/api/auth/**
-          filters:
-            - RewritePath=/api/auth/(?<segment>.*), /$\{segment}
-        - id: messages
-          uri: http://dreamrealm.com:8081
-          predicates:
-            - Path=/api/messages/**
-          filters:
-            - RewritePath=/api/messages/(?<segment>.*), /$\{segment}
-        - id: trading
-          uri: http://dreamrealm.com:8083
-          predicates:
-            - Path=/api/trading/**
-          filters:
-            - RewritePath=/api/trading/(?<segment>.*), /$\{segment}
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods: "*"
----
-spring:
-  config:
-    activate:
-      on-profile: development
-  cloud:
-    gateway:
-      routes:
-        - id: dreamrealm-auth
-          uri: http://localhost:8082
-          predicates:
-            - Path=**/**
-          filters:
-            - RewritePath=/api/auth/(?<segment>.*), /$\{segment}
-        - id: dreamrealm-messages
-          uri: http://localhost:8081
-          predicates:
-            - Path=/api/messages/**
-          filters:
-            - RewritePath=/api/messages/(?<segment>.*), /$\{segment}
-        - id: dreamrealm-trading
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/trading/**
-          filters:
-            - RewritePath=/api/trading/(?<segment>.*), /$\{segment}
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods: "*"
-
----
-spring:
-  config:
-    activate:
-      on-profile: kubernetes
-  cloud:
-    gateway:
-      routes:
-        - id: dreamrealm-auth
-          uri: http://dreamrealm-auth:8082
-          predicates:
-            - Path=/api/auth/**
-          filters:
-            - RewritePath=/api/auth/(?<segment>.*), /$\{segment}
-        - id: dreamrealm-messages
-          uri: http://dreamrealm-messages:8081
-          predicates:
-            - Path=/api/messages/**
-          filters:
-            - RewritePath=/api/messages/(?<segment>.*), /$\{segment}
-        - id: dreamrealm-trading
-          uri: http://dreamrealm-trading:8083
-          predicates:
-            - Path=/api/trading/**
-          filters:
-            - RewritePath=/api/trading/(?<segment>.*), /$\{segment}
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods: "*"
+        cloud:
+          gateway: DEBUG
